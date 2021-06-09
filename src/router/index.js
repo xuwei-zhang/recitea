@@ -1,22 +1,17 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import FirstPage from "../components/FirstPage";
 import Login from "../components/Login";
 import Register from "../components/Register";
+import Home from "../components/Home"
+import EditText from "../components/EditText";
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/home',
     name: 'Home',
     component: Home
-  },
-  {
-    path: '/firstpage',
-    name: 'FirstPage',
-    component: FirstPage
   },
   {
     path: '/login',
@@ -27,6 +22,11 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register
+  },
+  {
+    path: '/edittext',
+    name: 'EditText',
+    component: EditText
   },
   {
     path: '/about',

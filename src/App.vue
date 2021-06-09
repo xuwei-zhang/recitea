@@ -3,15 +3,15 @@
     <el-header>
       <el-menu mode="horizontal" :default-active="activeIndex">
         <el-menu-item>
-          <div align="left" class="logo">
-            <img alt="Vue logo" src="./assets/1623156340_224173.png">
+          <div align="left" class="logo" @click="goHome">
+            <img alt="Vue logo" src="./assets/logo.png">
           </div>
         </el-menu-item>
-        <el-menu-item style="float:right">
-          <el-button class="button" round>注册</el-button>
+        <el-menu-item style="float:right;margin: 0px">
+          <el-button class="button" @click="goReg" round>注册</el-button>
         </el-menu-item>
-        <el-menu-item style="float: right">
-          <el-button round > 登陆 </el-button>
+        <el-menu-item style="float: right;margin: 0px">
+          <el-button @click="goLog" round> 登陆 </el-button>
         </el-menu-item>
         <el-menu-item index="1" style="float: right">
           库
@@ -64,6 +64,15 @@ export default {
   methods: {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
+    },
+    goReg(){
+      this.$router.push('/register')
+    },
+    goLog(){
+      this.$router.push('/login')
+    },
+    goHome(){
+      this.$router.push('/home')
     }
   }
 }
