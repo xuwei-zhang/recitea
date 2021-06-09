@@ -2,13 +2,13 @@
   <el-main>
     <el-row>
       <el-col :span="12">
-        <el-card ref="element">
-          <el-image :src=logo class="scene"></el-image>
+        <el-card ref="element" style="height: 1200px">
+          <el-image :src=logo class="scene" style="height: 100%"></el-image>
         </el-card>
       </el-col>
       <el-col :span="12">
-        <el-card style="height: 900px">
-          <div style="line-height: 90px">
+        <el-card style="height: 1200px">
+          <div style="line-height: 130px">
             <p>
               《富士山》
             </p>

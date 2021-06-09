@@ -1,6 +1,6 @@
 <template>
 <el-main>
-  <el-form ref="registerForm" :model="ruleForm" :rules="rules" label-width="80px" class="login-box">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" class="login-box">
     <h3 class="login-title">欢迎注册</h3>
     <el-form-item label="用户名" prop="username" >
       <el-input v-model="ruleForm.username" type="text" auto-complete="off"></el-input>
@@ -23,6 +23,18 @@
 export default {
   name: "Register",
   data() {
+    let passValidation = (rule, value, callback) =>{
+      if (value === ''){
+        callback(new Error("密码不可为空"))
+      }
+      else if (value !== this.ruleForm.password){
+        callback(new Error("两次输入的密码不一致"));
+      }
+      else
+      {
+        callback();
+      }
+    };
     return{
       ruleForm: {
         password: '',
@@ -37,9 +49,14 @@ export default {
           {required: true, message: '密码不可为空', trigger: 'blur'}
         ],
         checkPass: [
-          {required: true, message: '密码不可为空', trigger: 'blur'}
+          {required: true, validator: passValidation, trigger: 'blur'}
         ]
       },
+    }
+  },
+  methods: {
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
     }
   }
 }

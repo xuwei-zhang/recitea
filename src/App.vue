@@ -7,10 +7,10 @@
             <img alt="Vue logo" src="./assets/logo.png">
           </div>
         </el-menu-item>
-        <el-menu-item style="float:right;margin: 0px">
+        <el-menu-item style="float:right;padding-left: 5px;padding-right: 5px">
           <el-button class="button" @click="goReg" round>注册</el-button>
         </el-menu-item>
-        <el-menu-item style="float: right;margin: 0px">
+        <el-menu-item style="float: right;padding-left: 5px;padding-right: 5px">
           <el-button @click="goLog" round> 登陆 </el-button>
         </el-menu-item>
         <el-menu-item index="1" style="float: right">
