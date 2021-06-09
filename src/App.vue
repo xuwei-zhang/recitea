@@ -1,20 +1,29 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <el-header>
+      <el-menu mode="horizontal" :default-active="activeIndex">
+        <el-menu-item>
+          <div align="left" class="logo">
+            <img alt="Vue logo" src="./assets/1623156340_224173.png">
+          </div>
+        </el-menu-item>
+        <el-menu-item style="float:right">
+          <el-button class="button" round>注册</el-button>
+        </el-menu-item>
+        <el-menu-item style="float: right">
+          <el-button round > 登陆 </el-button>
+        </el-menu-item>
+        <el-menu-item index="1" style="float: right">
+          库
+        </el-menu-item>
+        <el-menu-item index="2" style="float: right">
+          文字导入
+        </el-menu-item>
+      </el-menu>
+    </el-header>
+    <router-view/>
   </div>
 </template>
-
-<script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
-</script>
 
 <style>
 #app {
@@ -23,6 +32,39 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+.logo img{
+  height: 70%;
+  width: 70%;
+}
+
+#nav {
+  padding: 30px;
+}
+
+#nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+#nav a.router-link-exact-active {
+  color: #42b983;
 }
 </style>
+
+<script>
+export default {
+  data() {
+    return {
+      activeIndex: '1',
+      activeIndex2: '1'
+    };
+  },
+  methods: {
+    handleSelect(key, keyPath) {
+      console.log(key, keyPath);
+    }
+  }
+}
+</script>
