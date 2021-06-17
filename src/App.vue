@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <el-header>
-      <el-menu mode="horizontal" :default-active="activeIndex">
+      <el-menu mode="horizontal">
         <el-menu-item>
           <div align="left" class="logo" @click="goHome">
             <img alt="Vue logo" src="./assets/logo.png">
@@ -58,8 +58,6 @@
 export default {
   data() {
     return {
-      activeIndex: '1',
-      activeIndex2: '1'
     };
   },
   methods: {

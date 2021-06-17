@@ -1,70 +1,83 @@
 <template>
-<el-row>
-  <el-col :span="8">
-    <el-card class="card">
-      <h3>请输入待出题的文本</h3>
-      <div v-if="inputVisible">
-        <el-input
-                  type="textarea"
-                  :autosize="{ minRows: 10, maxRows: 20}"
-                  placeholder="请输入内容"
-                  v-model="textarea"
-        >
-        </el-input>
-        <el-button @click="inputVisible=false;textVisible=true">
-          转换
-        </el-button>
-      </div>
-      <div v-if="textVisible" style="font-size: 20px;text-align: justify">
-        {{textarea}}
-        <div style="margin-top: 20px" align="center">
-          <el-button @click="inputVisible=true;textVisible=false">
-            复位
-          </el-button>
-          <el-button @click="handleMouseSelect">
-            Get!
-          </el-button>
+    <el-row>
+      <el-col :span="8">
+        <el-card class="card">
+          <h3>请输入待出题的文本</h3>
+          <div v-if="inputVisible">
+            <el-input
+                type="textarea"
+                :autosize="{ minRows: 10, maxRows: 20}"
+                placeholder="请输入内容"
+                v-model="textarea"
+            >
+            </el-input>
+            <el-button @click="inputVisible=false;textVisible=true">
+              转换
+            </el-button>
+          </div>
+          <div v-if="textVisible" style="font-size: 20px;text-align: justify">
+            {{textarea}}
+            <div style="margin-top: 20px" align="center">
+              <el-button @click="inputVisible=true;textVisible=false">
+                复位
+              </el-button>
+              <el-button @click="handleMouseSelect">
+                Get!
+              </el-button>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="8">
+        <el-card class="card">
+          <h3>出题区</h3>
+          <div v-for="item in list" v-bind:key="item.id">
+            第{{item.id + 1}}题
+            :
+            <p style="font-size: 20px;text-align: justify">
+              {{item.text}}
+            </p>
+            <el-button @click="handleMouseSelect2(item.id, item.text)">
+              出题！
+            </el-button>
+            <el-button @click="deleteItem(item.id)" type="danger">
+              删除该题
+            </el-button>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="8">
+        <el-card class="card">
+          <h3>题目展示区</h3>
+          <div v-for="item in quizList" v-bind:key="item.id">
+            第{{item.id + 1}}题:
+            原文:
+            <p style="font-size: 20px;text-align: justify">
+              {{item.text}}
+            </p>
+            需要填的空:
+            <div v-for="(iitem,i) in item.qtext" v-bind:key="i" style="font-size: 20px;text-align: justify">
+              {{i+1}}."{{iitem}}";
+            </div>
+            <br>
+            <el-button>提交至题库！</el-button>
+          </div>
+        </el-card>
+      </el-col>
+      <el-dialog title="请选择要添加的题库" :visible.sync="dialogVisible">
+        <el-select v-model="value" placeholder="请选择">
+          <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+          </el-option>
+        </el-select>
+        <div style="margin: 20px">
+          <el-button @click="defineProject">确定</el-button>
         </div>
-      </div>
-    </el-card>
-  </el-col>
-  <el-col :span="8">
-    <el-card class="card">
-      <h3>出题区</h3>
-      <div v-for="item in list" v-bind:key="item.id">
-        第{{item.id + 1}}题
-        :
-        <p style="font-size: 20px;text-align: justify">
-          {{item.text}}
-        </p>
-        <el-button @click="handleMouseSelect2(item.id, item.text)">
-          出题！
-        </el-button>
-        <el-button @click="deleteItem(item.id)" type="danger">
-          删除该题
-        </el-button>
-      </div>
-    </el-card>
-  </el-col>
-  <el-col :span="8">
-    <el-card class="card">
-      <h3>题目展示区</h3>
-      <div v-for="item in quizList" v-bind:key="item.id">
-        第{{item.id + 1}}题:
-        原文:
-        <p style="font-size: 20px;text-align: justify">
-          {{item.text}}
-        </p>
-        需要填的空:
-        <div v-for="(iitem,i) in item.qtext" v-bind:key="i" style="font-size: 20px;text-align: justify">
-          {{i+1}}."{{iitem}}";
-        </div>
-        <br>
-        <el-button>提交至题库！</el-button>
-      </div>
-    </el-card>
-  </el-col>
-</el-row>
+      </el-dialog>
+    </el-row>
 </template>
 
 <script>
@@ -80,7 +93,15 @@ export default {
       id: 0,
       quizId:0,
       tid:-1,
+      projectList: [],
+      dialogVisible: false,
+      options : [],
+      value: '',
+
     }
+  },
+  mounted() {
+    this.dialogVisible = true
   },
   methods:{
     handleMouseSelect() {
@@ -143,8 +164,19 @@ export default {
           this.quizList[j].tid -= 1
         }
       }
-}
-
+},
+    defineProject(){
+      if (this.value === '')
+      {
+        this.dialogVisible = true
+        if (this.projectList.length === 0)
+        {
+          this.$message.error('项目列表为空,需要先创建项目, 为您自动跳转到项目库页面！')
+          this.$router.push('/projectlist')
+        }
+      }
+      else this.dialogVisible = false
+    }
   }
 }
 </script>
