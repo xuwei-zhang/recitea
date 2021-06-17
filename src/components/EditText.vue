@@ -1,7 +1,8 @@
 <template>
 <el-row>
-  <el-col span="8">
-    <el-card>
+  <el-col :span="8">
+    <el-card class="card">
+      <h3>请输入待出题的文本</h3>
       <div v-if="inputVisible">
         <el-input
                   type="textarea"
@@ -27,10 +28,11 @@
       </div>
     </el-card>
   </el-col>
-  <el-col span="8">
-    <el-card>
+  <el-col :span="8">
+    <el-card class="card">
+      <h3>出题区</h3>
       <div v-for="item in list" v-bind:key="item.id">
-        {{item.id + 1}}
+        第{{item.id + 1}}题
         :
         <p style="font-size: 20px;text-align: justify">
           {{item.text}}
@@ -38,11 +40,15 @@
         <el-button @click="handleMouseSelect2(item.id, item.text)">
           出题！
         </el-button>
+        <el-button @click="deleteItem(item.id)" type="danger">
+          删除该题
+        </el-button>
       </div>
     </el-card>
   </el-col>
-  <el-col span="8">
-    <el-card>
+  <el-col :span="8">
+    <el-card class="card">
+      <h3>题目展示区</h3>
       <div v-for="item in quizList" v-bind:key="item.id">
         第{{item.id + 1}}题:
         原文:
@@ -71,7 +77,7 @@ export default {
       textVisible:false,
       list: [],
       quizList: [],
-      id:0,
+      id: 0,
       quizId:0,
       tid:-1,
     }
@@ -89,10 +95,12 @@ export default {
       let qtext = window.getSelection().toString();
       if (qtext.length>0)
       {
+        console.log(this.tid, tid, this.quizList.length)
         if (this.tid >= tid)
         {
           for(let i=0; i<this.quizList.length; i++)
           {
+            console.log(this.quizList)
             if (this.quizList[i].tid === tid)
             {
               if (this.quizList[i].qtext.indexOf(qtext)<0)
@@ -106,12 +114,43 @@ export default {
           this.quizId += 1;
         }
       }
-    }
+    },
+    deleteItem(id){
+      this.list.splice(id,1)
+      for (var i = id; i<this.list.length;i++)
+      {
+        if(this.list[i].id === 0)
+          continue
+        this.list[i].id = this.list[i].id - 1
+      }
+      this.id = this.list.length
+
+      var flag = false
+      for (var j = 0; j < this.quizList.length; j++)
+      {
+        if (this.quizList[j].id === id)
+        {
+          this.quizList.splice(j, 1)
+          this.quizId = this.quizList.length
+          flag = true
+          j = j - 1
+          this.tid -= 1
+          continue
+        }
+        if (flag)
+        {
+          this.quizList[j].id =  this.quizList[j].id - 1
+          this.quizList[j].tid -= 1
+        }
+      }
+}
 
   }
 }
 </script>
 
 <style scoped>
-
+.card{
+  height: 1200px;
+}
 </style>

@@ -16,7 +16,7 @@
         <el-menu-item index="1" style="float: right" @click="goProjectList">
           库
         </el-menu-item>
-        <el-menu-item index="2" style="float: right">
+        <el-menu-item index="2" style="float: right" @click="goEditText">
           文字导入
         </el-menu-item>
 
@@ -77,6 +77,9 @@ export default {
     },
     goProjectList(){
       this.$router.push('/projectlist')
+    },
+    goEditText(){
+      this.$router.push('/edittext')
     }
   }
 }

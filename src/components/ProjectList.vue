@@ -3,7 +3,7 @@
     <el-aside>
       <el-menu default-active="1">
         <h3>项目列表</h3>
-        <el-menu-item v-for="item in projectList" v-bind:key="item.id" @click="getProjectData(item.id)" index="item.id">
+        <el-menu-item v-for="item in projectList" v-bind:key="item.id" @click="getProjectData(item.id)" :index="item.id">
           {{item.title}}
         </el-menu-item>
       </el-menu>
