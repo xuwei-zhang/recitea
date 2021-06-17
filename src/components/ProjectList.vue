@@ -3,8 +3,8 @@
     <el-aside>
       <el-menu default-active="1">
         <h3>项目列表</h3>
-        <el-menu-item v-for="item in projectList" v-bind:key="item.id" @click="getProjectData(item.id)" index="item.id">
-          {{item.title}}
+        <el-menu-item v-for="(item,i) in titleList" v-bind:key="i" @click="getProjectData(i)">
+          {{item}}
         </el-menu-item>
       </el-menu>
     </el-aside>
@@ -40,29 +40,62 @@ export default {
   name: "ProjectList",
   data(){
     return {
-      projectList : [],
+      titleList : [],
+      idList: [],
       tableData: [],
-      NowProjectId: 1
+      NowProjectId: 0
     }
   },
   methods: {
     getProjectData(projectId){
-      axios.post('/api/getitems', projectId).then(response => {
-        this.tableData = response.data.data
-        console.log(response)
+      console.log("index: " + projectId)
+      axios({
+        method:'post',
+        url:'/question/getquestion',
+        params:{'projectid': this.idList[projectId]}
+      }).then(response => {
+        console.log(response.data)
+        if(response.data.code === 200){
+          this.tableData = response.data.tablelist
+        }else{
+          alert('错误')
+          this.$router.push('/main')
+        }
+        
+      }).catch(error=>{
+        console.log(error)
+        this.$router.push('/main')
       })
-      this.NowProjectId = projectId
+      this.NowProjectId = this.idList[projectId]
     },
     gotoQuiz(){
       this.$router.push({path:'/quiz', query:{projectid:String(this.NowProjectId), id:'1'}})
     }
   },
   mounted(){
-    axios.get('/api/getprojectlist').then(response => {
-      this.projectList = response.data.data
-      console.log(response)
+    axios({
+      method:'post',
+      url:'/project/getproject',
+      params:{'id':localStorage.getItem('id')}
+
+    }).then(response => {
+      if(response.data.code === 200){
+        console.log(response.data)
+        this.titleList = response.data.namelist
+        this.idList = response.data.projectidlist 
+        console.log(this.idList)
+        this.getProjectData(0)
+      }else{
+        alert('错误')
+        this.$router.push('/main')
+      }
+    }).catch(error=>{
+      console.log(error)
+      alert('错误')
+      this.$router.push('/main')
     });
-    this.getProjectData(1);
+   
+    
   }
 }
 </script>
