@@ -13,12 +13,13 @@
         <el-menu-item style="float: right;padding-left: 5px;padding-right: 5px">
           <el-button @click="goLog" round> 登陆 </el-button>
         </el-menu-item>
-        <el-menu-item index="1" style="float: right">
+        <el-menu-item index="1" style="float: right" @click="goProjectList">
           库
         </el-menu-item>
         <el-menu-item index="2" style="float: right">
           文字导入
         </el-menu-item>
+
       </el-menu>
     </el-header>
     <router-view/>
@@ -73,6 +74,9 @@ export default {
     },
     goHome(){
       this.$router.push('/home')
+    },
+    goProjectList(){
+      this.$router.push('/projectlist')
     }
   }
 }

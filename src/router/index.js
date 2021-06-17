@@ -4,6 +4,8 @@ import Login from "../components/Login";
 import Register from "../components/Register";
 import Home from "../components/Home"
 import EditText from "../components/EditText";
+import ProjectList from "../components/ProjectList";
+import Quiz from "../components/Quiz";
 
 Vue.use(VueRouter)
 
@@ -27,6 +29,16 @@ const routes = [
     path: '/edittext',
     name: 'EditText',
     component: EditText
+  },
+  {
+    path: '/projectlist',
+    name: 'ProjectList',
+    component: ProjectList
+  },
+  {
+    path: '/quiz',
+    name: 'Quiz',
+    component: Quiz
   },
   {
     path: '/about',
