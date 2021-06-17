@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: "Login",
   data() {
@@ -43,8 +44,34 @@ export default {
       // 为表单绑定验证功能
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          axios({
+            method:"post",
+            url:'/user/login',
+            params:{'name':this.form.username,'password':this.form.password}
+        }).then(
+          response=>{
+            console.log(response)
+            if(response.data.code === 200)
+            {
+              localStorage.setItem("id", response.data.id);
+              console.log(localStorage.getItem('id'));
+              this.$router.push("/main");
+            }
+            else if(response.data.code === 400){
+              alert('用户名或密码错误');
+              
+            }
+            else{
+              alert('错误')
+              this.$router.go(0);
+            }
+          }
+        ).catch(error=>{
+          console.log(error)
+          this.$router.go(0);
+        })
           // 使用 vue-router 路由到指定页面，该方式称之为编程式导航
-          this.$router.push("/main");
+          
         } else {
           this.dialogVisible = true;
           return false;

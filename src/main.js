@@ -13,6 +13,9 @@ Vue.config.productionTip = false
 Vue.use(VueRouter)
 Vue.use(ElementUI)
 
+axios.defaults.baseURL = 'http://localhost:8081'
+Vue.prototype.$axios = axios
+
 new Vue({
   $,
   router,
