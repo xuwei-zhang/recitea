@@ -2,12 +2,12 @@
   <el-main>
     <el-row>
       <el-col :span="12">
-        <el-card ref="element" style="height: 1200px">
+        <el-card ref="element" class="card">
           <el-image :src=logo class="scene" style="height: 100%"></el-image>
         </el-card>
       </el-col>
       <el-col :span="12">
-        <el-card style="height: 1200px">
+        <el-card class="card">
           <div style="line-height: 130px">
             <p>
               《富士山》
@@ -81,5 +81,8 @@ p{
   font-family: "WenYue GuDianMingChaoTi (Non-Commercial Use)";
   text-align: center;
   font-size: 40px;
+}
+.card{
+  height: 1200px;
 }
 </style>

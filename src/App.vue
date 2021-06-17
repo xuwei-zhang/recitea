@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <el-header>
-      <el-menu mode="horizontal" :default-active="activeIndex">
+      <el-menu mode="horizontal">
         <el-menu-item>
           <div align="left" class="logo" @click="goHome">
             <img alt="Vue logo" src="./assets/logo.png">
@@ -16,7 +16,7 @@
         <el-menu-item index="1" style="float: right" @click="goProjectList">
           库
         </el-menu-item>
-        <el-menu-item index="2" style="float: right">
+        <el-menu-item index="2" style="float: right" @click="goEditText">
           文字导入
         </el-menu-item>
 
@@ -58,8 +58,6 @@
 export default {
   data() {
     return {
-      activeIndex: '1',
-      activeIndex2: '1'
     };
   },
   methods: {
@@ -77,6 +75,9 @@ export default {
     },
     goProjectList(){
       this.$router.push('/projectlist')
+    },
+    goEditText(){
+      this.$router.push('/edittext')
     }
   }
 }
