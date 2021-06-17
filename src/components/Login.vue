@@ -53,6 +53,7 @@ export default {
             console.log(response)
             if(response.data.code === 200)
             {
+              alert('登录成功')
               localStorage.setItem("id", response.data.id);
               console.log(localStorage.getItem('id'));
               this.$router.push("/main");

@@ -19,7 +19,8 @@
 </el-main>
 </template>
 
-<script>
+<script>  
+import axios from 'axios'
 export default {
   name: "Register",
   data() {
@@ -57,6 +58,32 @@ export default {
   methods: {
     resetForm(formName) {
       this.$refs[formName].resetFields();
+    },
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if(valid){
+          axios({
+            method:'post',
+            url:'/user/register',
+            params:{'name':this.ruleForm.username,'password':this.ruleForm.password}
+          }).then(
+            response=>{
+              console.log(response)
+              if(response.data.code === 200){
+                alert('注册成功')
+                this.$router.push('/login')
+              }
+              else if(response.data.code === 300){
+                alert('用户名重复')
+              }
+            }
+          ).catch(error=>{
+            console.log(error)
+            alert('错误')
+            this.$router.go(0)
+          })
+        }
+      });
     }
   }
 }
