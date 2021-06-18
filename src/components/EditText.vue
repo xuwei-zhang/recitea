@@ -6,6 +6,7 @@
             当前添加的题库：{{this.value}}
           </h3>
           <el-button @click="dialogVisible=true">更改题库</el-button>
+          <el-divider></el-divider>
           <h3>请输入待出题的文本</h3>
           <div v-if="inputVisible">
             <el-input
@@ -33,41 +34,32 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="8">
-        <el-card class="card">
-          <h3>出题区</h3>
-          <div v-for="item in list" v-bind:key="item.id">
-            第{{item.id + 1}}题
-            :
-            <p style="font-size: 20px;text-align: justify">
-              {{item.text}}
-            </p>
-            <el-button @click="handleMouseSelect2(item.id, item.text)">
-              出题！
-            </el-button>
-            <el-button @click="deleteItem(item.id)" type="danger">
-              删除该题
-            </el-button>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card class="card">
-          <h3>题目展示区</h3>
-          <div v-for="item in quizList" v-bind:key="item.id">
-            第{{item.id + 1}}题:
-            原文:
-            <p style="font-size: 20px;text-align: justify">
-              {{item.text}}
-            </p>
-            需要填的空:
-            <div v-for="(iitem,i) in item.qtext" v-bind:key="i" style="font-size: 20px;text-align: justify">
-              {{i+1}}."{{iitem}}";
+      <el-col :span="16">
+          <el-card class="card">
+            <h3>出题区</h3>
+            <el-divider></el-divider>
+            <div v-for="(item, i) in list" v-bind:key="item.id">
+              第{{i + 1}}题
+              :
+              <p style="font-size: 20px;text-align: justify">
+                {{item.text}}
+              </p>
+              <el-button @click="handleMouseSelect2(i)" :disabled="item.isSubmit">
+                出题！
+              </el-button>
+              <el-button @click="deleteItem(i)" type="danger" :disabled="item.isSubmit">
+                删除该题
+              </el-button>
+              <div v-show="item.qtext.length > 0" style="margin: 10px">
+                需要填的空：
+              </div>
+              <div v-for="(iitem, j) in item.qtext" v-bind:key="j" style="font-size: 20px;text-align: justify">
+                {{j+1}}."{{iitem}}"
+              </div>
+              <el-button v-show="item.qtext.length > 0" @click="submitQuiz(i)" :disabled="item.isSubmit">提交至题库！</el-button>
+              <el-divider></el-divider>
             </div>
-            <br>
-            <el-button @click="submitQuiz(item.id)" :disabled="isSubmit[item.id]">提交至题库！</el-button>
-          </div>
-        </el-card>
+          </el-card>
       </el-col>
       <el-dialog title="请选择要添加的题库" :visible.sync="dialogVisible">
         <el-select v-model="value" placeholder="请选择">
@@ -95,11 +87,6 @@ export default {
       inputVisible:true,
       textVisible:false,
       list: [],
-      quizList: [],
-      isSubmit: [],
-      id: 0,
-      quizId:0,
-      tid:-1,
       projectList: [],
       projeceidList: [],
       dialogVisible: false,
@@ -135,63 +122,27 @@ export default {
       let text = window.getSelection().toString();
       if (text.length>0)
       {
-        this.list.push({id:this.id, text:text});
-        this.id += 1;
+        this.list.push({text:text, qtext:[], isSubmit: false});
       }
     },
-    handleMouseSelect2(tid, text) {
+    handleMouseSelect2(i) {
       let qtext = window.getSelection().toString();
       if (qtext.length>0)
       {
-        console.log(this.tid, tid, this.quizList.length)
-        if (this.tid >= tid)
+        var item = this.list[i].qtext
+        for(var j = 0;j<item.length; j++)
         {
-          for(let i=0; i<this.quizList.length; i++)
+          if (item[j] === qtext)
           {
-            console.log(this.quizList)
-            if (this.quizList[i].tid === tid)
-            {
-              if (this.quizList[i].qtext.indexOf(qtext)<0)
-                this.quizList[i].qtext.push(qtext)
-            }
+            return
           }
         }
-        else{
-          this.tid = tid
-          this.quizList.push({id:this.quizId,tid:tid, text:text, qtext:[qtext] });
-          this.quizId += 1;
-          this.isSubmit.push(false)
+        this.list[i].qtext.push(qtext);
         }
-      }
+      },
+    deleteItem(id) {
+      this.list.splice(id, 1)
     },
-    deleteItem(id){
-      this.list.splice(id,1)
-      for (var i = id; i<this.list.length;i++)
-      {
-        if(this.list[i].id === 0)
-          continue
-        this.list[i].id = this.list[i].id - 1
-      }
-      this.id = this.list.length
-      var flag = false
-      for (var j = 0; j < this.quizList.length; j++)
-      {
-        if (this.quizList[j].id === id)
-        {
-          this.quizList.splice(j, 1)
-          this.quizId = this.quizList.length
-          flag = true
-          j = j - 1
-          this.tid -= 1
-          continue
-        }
-        if (flag)
-        {
-          this.quizList[j].id =  this.quizList[j].id - 1
-          this.quizList[j].tid -= 1
-        }
-      }
-},
     defineProject(){
       if (this.value === '')
       {
@@ -209,14 +160,23 @@ export default {
         this.dialogVisible = false
       }
     },
-    submitQuiz(id){
-      var res = this.quizList[id]
-      console.log(res)
+    submitQuiz(i){
+      if(this.list[i].qtext.length === 0)
+      {
+        this.$message.error('提交失败，请先选择需要填的空！')
+        return
+      }
+      var res = {
+        text: '',
+        qtext: []
+      }
+      res.qtext = this.list[i].qtext
+      res.text = this.list[i].text
       // 如果提交成功，按钮会disabled
-      this.isSubmit[id] = true
+      this.list[i].isSubmit = true
       return res
     }
-  }
+}
 }
 </script>
 
