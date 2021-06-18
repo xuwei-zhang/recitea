@@ -5,16 +5,6 @@
         <div>
           <h3 style="float: left">项目列表</h3>
           <el-button @click="gotoNewProject" style="float: right;margin: 15px"> 新建项目</el-button>
-          <el-dialog title="新建项目" :visible.sync="dialogFormVisible">
-            <el-form :model="projectData" :rules="rules" ref="projectData">
-              <el-form-item label="项目名" prop="projectname">
-                <el-input type="text" v-model="projectData.projectname"></el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" @click="submitForm('projectData')">提交</el-button>
-              </el-form-item>
-            </el-form>
-          </el-dialog>
         </div>
         <el-menu-item v-for="(item,i) in titleList" v-bind:key="i" @click="getProjectData(i)">
           {{item}}
@@ -22,7 +12,16 @@
       </el-menu>
     </el-aside>
     <el-main>
-
+      <el-dialog title="新建项目" :visible.sync="dialogFormVisible">
+        <el-form :model="projectData" :rules="rules" ref="projectData">
+          <el-form-item label="项目名" prop="projectname">
+            <el-input type="text" v-model="projectData.projectname"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="submitForm('projectData')">提交</el-button>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
       <el-dialog title="删除项目" :visible.sync="deleteVisible">
         <div>
           您确定删除该项目及该项目下的所有题目？
