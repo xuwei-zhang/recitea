@@ -2,9 +2,9 @@
   <el-container>
     <el-aside>
       <el-menu default-active="1">
-        <div>
-          <h3 style="float: left">项目列表</h3>
-          <el-button @click="gotoNewProject" style="float: right;margin: 15px"> 新建项目</el-button>
+      <div style="align:center">
+          <h3>项目列表</h3>
+          <el-button @click="gotoNewProject"> 新建项目</el-button>
         </div>
         <el-menu-item v-for="(item,i) in titleList" v-bind:key="i" @click="getProjectData(i)">
           {{item}}
@@ -179,7 +179,7 @@ export default {
         response => {
           if(response.data.code === 200){
             alert("删除项目成功")
-            this.$router.go(0)
+            this.getProjectData(this.NowProjectId)
           }
           else{
             alert("删除项目失败")
