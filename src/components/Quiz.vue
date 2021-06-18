@@ -42,23 +42,12 @@
 <script>
 
 import router from "../router";
-
+import axios from 'axios';
 export default {
   name: "Quiz",
   data(){
     return {
-      tests : [
-          {
-            id: 1,
-            text: "我家的后面有一个很大的园，相传叫作百草园。现在是早已并屋子一起卖给朱文公的子孙了，连那最末次的相见也已经隔了七八年，其中似乎确凿只有一些野草，但那时却是我的乐园。不必说碧绿的菜畦，光滑的石井栏，高大的皂荚树，紫红的桑葚；也不必说鸣蝉在树叶里长吟。",
-            words: ["百草园","朱文公", "碧绿的菜畦"]
-          },
-        {
-          id: 2,
-          text: "我家的后面有一个很大的园，相传叫作百草园。现在是早已并屋子一起卖给朱文公的子孙了，连那最末次的相见也已经隔了七八年，其中似乎确凿只有一些野草，但那时却是我的乐园。不必说碧绿的菜畦，光滑的石井栏，高大的皂荚树，紫红的桑葚；也不必说鸣蝉在树叶里长吟。",
-          words: ["百草园","朱文公", "碧绿的菜畦"]
-        }
-      ],
+      tests : [],
       inputlen : 0,
       input : null,
       inputvalue : [],
@@ -70,9 +59,28 @@ export default {
       isLast: false
     }
   },
-  mounted() {
-    this.changeHTML(this.getQueryVariable('id') - 1);
-    this.checkPageValid();
+  created() {
+    axios({
+        method:'post',
+        url:'/question/getquestion',
+        params:{'projectid': this.getQueryVariable('projectid')}
+      }).then(response => {
+        console.log(response.data)
+        if(response.data.code === 200){
+          this.tests = response.data.tablelist
+          console.log(this.tests)
+          this.changeHTML(this.getQueryVariable('id') - 1);
+          this.checkPageValid();
+        }else{
+          alert('错误')
+          this.$router.push('/main')
+        }
+        
+      }).catch(error=>{
+        console.log(error)
+        this.$router.push('/main')
+      });
+    
   },
   methods:{
     changeHTML(i){

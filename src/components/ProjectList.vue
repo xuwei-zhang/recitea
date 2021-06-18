@@ -102,6 +102,19 @@ export default {
         console.log(response.data)
         if(response.data.code === 200){
           this.tableData = response.data.tablelist
+          for(var o=0;o<this.tableData.length;o++)
+          {
+            var tmp = this.tableData[o].words 
+            var res = ""
+            for(var k =0; k<tmp.length;k++)
+            {
+              if (k != tmp.length - 1)
+                res += tmp[k] + ","
+              else
+                res += tmp[k]
+            }
+            this.tableData[o].words = res
+          }
         }else{
           alert('错误')
           this.$router.push('/main')
@@ -144,7 +157,25 @@ export default {
 
     },
     deleteProject(){
-      return
+      axios({
+        method:'post',
+        url:'/project/deleteproject',
+        params:{'projectid': this.NowProjectId}
+      }).then(
+        response => {
+          if(response.data.code === 200){
+            alert("删除项目成功")
+            this.$router.go(0)
+          }
+          else{
+            alert("删除项目失败")
+            this.$router.push('/home')
+          }
+        }
+      ).catch(error => {
+        console.log(error)
+        this.$router.push('/home')
+      })
     }
   },
   mounted(){
@@ -159,7 +190,7 @@ export default {
         this.titleList = response.data.namelist
         this.idList = response.data.projectidlist 
         console.log(this.idList)
-        this.getProjectData(0)
+        this.getProjectData(this.NowProjectId)
       }else{
         alert('错误')
         this.$router.push('/main')
