@@ -116,6 +116,8 @@ export default {
       alert('错误')
       this.$router.push('/home')
     });
+    this.projectindex = this.getQueryVariable('id')
+    this.value = this.projectList[this.projectindex]
   },
   methods:{
     handleMouseSelect() {
@@ -175,6 +177,13 @@ export default {
       // 如果提交成功，按钮会disabled
       this.list[i].isSubmit = true
       return res
+    },
+    getQueryVariable(name)
+    {
+      var url2 = window.location.href;
+      var temp2 = url2.split('?')[1];
+      var param2 = new URLSearchParams('?'+temp2);
+      return param2.get(name)
     }
 }
 }

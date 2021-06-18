@@ -2,24 +2,27 @@
   <el-container>
     <el-aside>
       <el-menu default-active="1">
-        <h3>项目列表</h3>
+        <div>
+          <h3 style="float: left">项目列表</h3>
+          <el-button @click="gotoNewProject" style="float: right;margin: 15px"> 新建项目</el-button>
+          <el-dialog title="新建项目" :visible.sync="dialogFormVisible">
+            <el-form :model="projectData" :rules="rules" ref="projectData">
+              <el-form-item label="项目名" prop="projectname">
+                <el-input type="text" v-model="projectData.projectname"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="submitForm('projectData')">提交</el-button>
+              </el-form-item>
+            </el-form>
+          </el-dialog>
+        </div>
         <el-menu-item v-for="(item,i) in titleList" v-bind:key="i" @click="getProjectData(i)">
           {{item}}
         </el-menu-item>
       </el-menu>
     </el-aside>
     <el-main>
-      <el-button @click="gotoNewProject" style="float: left"> 新建项目</el-button>
-      <el-dialog title="新建项目" :visible.sync="dialogFormVisible">
-        <el-form :model="projectData" :rules="rules" ref="projectData">
-          <el-form-item label="项目名" prop="projectname">
-            <el-input type="text" v-model="projectData.projectname"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="submitForm('projectData')">提交</el-button>
-          </el-form-item>
-        </el-form>
-      </el-dialog>
+
       <el-dialog title="删除项目" :visible.sync="deleteVisible">
         <div>
           您确定删除该项目及该项目下的所有题目？
@@ -31,6 +34,7 @@
       <div style="float: right;padding-left: 5px;padding-right: 5px">
         <el-button @click="deleteVisible=true" type="danger"> 删除项目</el-button>
       </div>
+      <el-button style="float: left" @click="newItem">新建题目</el-button>
         <el-button icon="el-icon-edit" style="float: right" @click="gotoQuiz">去做题！</el-button>
       <el-table :data="tableData">
         <el-table-column
@@ -128,12 +132,12 @@ export default {
           }
         }else{
           alert('错误')
-          this.$router.push('/main')
+          // this.$router.push('/main')
         }
         
       }).catch(error=>{
         console.log(error)
-        this.$router.push('/main')
+        // this.$router.push('/main')
       })
       this.NowProjectId = this.idList[projectId]
     },
@@ -211,6 +215,14 @@ export default {
         alert('错误')
         this.$router.push('/home')
       })
+    },
+    newItem(){
+      this.$router.push({
+        path:'/edittext',
+        query:{
+          id: this.NowProjectId
+        }
+      })
     }
   },
   mounted(){
@@ -228,12 +240,12 @@ export default {
         this.getProjectData(this.NowProjectId)
       }else{
         alert('错误')
-        this.$router.push('/main')
+        // this.$router.push('/main')
       }
     }).catch(error=>{
       console.log(error)
       alert('错误')
-      this.$router.push('/main')
+      // this.$router.push('/main')
     });
    
     
