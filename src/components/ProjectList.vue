@@ -48,6 +48,17 @@
           label="填空词"
           width="300">
         </el-table-column>
+        <el-table-column align="right">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              @click="handleEdit(scope.$index)">练习</el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleDelete(scope.$index)">删除</el-button>
+          </template>
+    </el-table-column>
       </el-table>
     </el-main>
   </el-container>
@@ -174,6 +185,30 @@ export default {
         }
       ).catch(error => {
         console.log(error)
+        this.$router.push('/home')
+      })
+    },
+    handleEdit(index) {
+      this.$router.push({path:'/quiz', query:{projectid:String(this.NowProjectId), id: index + 1}})
+    },
+    handleDelete(index) {
+      var questionid = this.tableData[index].questionid
+      axios({
+        method:'post',
+        url:'/question/deletequestion',
+        params:{'questionid': questionid}
+      }).then(response => {
+        if(response.data.code === 200){
+          alert('删除题目成功')
+          this.$router.go(0)
+        }
+        else{
+          alert('删除题目失败')
+          this.$router.push('/home')
+        }
+      }).catch(error => {
+        console.log(error)
+        alert('错误')
         this.$router.push('/home')
       })
     }

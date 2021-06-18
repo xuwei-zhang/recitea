@@ -72,13 +72,14 @@ export default {
           this.changeHTML(this.getQueryVariable('id') - 1);
           this.checkPageValid();
         }else{
-          alert('错误')
-          this.$router.push('/main')
+          alert('获取题目信息失败')
+          this.$router.push('/home')
         }
         
       }).catch(error=>{
         console.log(error)
-        this.$router.push('/main')
+        alert('错误')
+        this.$router.push('/home')
       });
     
   },

@@ -101,9 +101,11 @@ export default {
       quizId:0,
       tid:-1,
       projectList: [],
+      projeceidList: [],
       dialogVisible: false,
       options : [],
       value: '',
+      projectindex: 0,
       isEmptyProject: true
     }
   },
@@ -117,8 +119,7 @@ export default {
       if(response.data.code === 200){
         console.log(response.data)
         this.projectList = response.data.namelist
-        // this.idList = response.data.projectidlist 
-        // console.log(this.idList)
+        this.projectidList = response.data.projectidlist 
       }else{
         alert('错误')
         this.$router.push('/home')
@@ -202,12 +203,15 @@ export default {
       }
       else
       {
+        this.projectindex = this.projectList.indexOf(this.value)
+        console.log('projectindex: ' + this.projectindex)
         this.isEmptyProject = false
         this.dialogVisible = false
       }
     },
     submitQuiz(id){
       var res = this.quizList[id]
+      console.log(res)
       // 如果提交成功，按钮会disabled
       this.isSubmit[id] = true
       return res
