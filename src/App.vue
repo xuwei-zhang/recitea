@@ -15,7 +15,7 @@
           <el-button @click="goLog" round> 登陆 </el-button>
         </el-menu-item>
         <el-menu-item v-show="!isLogin" style="float: right;padding-left: 5px;padding-right: 5px">
-          您好，{{localStorage.getItem('username')}}
+          您好，{{this.username}}
         </el-menu-item>
         <el-menu-item v-show="!isLogin" style="float: right;padding-left: 5px;padding-right: 5px">
           <el-button @click="Logout" round> 注销 </el-button>
@@ -65,6 +65,7 @@
 export default {
   data() {
     return {
+      username : ''
     };
   },
   methods: {
@@ -88,7 +89,10 @@ export default {
     },
     isLogin(){
       if (localStorage.getItem('id'))
+      {
+        this.username = localStorage.getItem('username')
         return true
+      }
       else
         return false
     },
