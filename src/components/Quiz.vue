@@ -16,6 +16,9 @@
       <el-col :span="4">
         <el-card style="height: 700px">
           <div id="content" style="text-align: justify">
+            <div v-show="showFlag">
+              <el-button @click="resetInput"> 清空</el-button>
+            </div>
             <div v-for="(item, i) in this.ans" v-bind:key="i" :id="i">
               {{(i+1)}}.<el-input v-model="inputvalue[i]" ></el-input>
               <div v-show="showFlag">
@@ -177,6 +180,12 @@ export default {
       if (parseInt(this.getQueryVariable('id')) === this.tests.length)
       {
         this.isLast = true
+      }
+    },
+    resetInput(){
+      for (var i = 0; i< this.inputvalue.length; i++)
+      {
+        this.inputvalue[i] = ''
       }
     }
   }
