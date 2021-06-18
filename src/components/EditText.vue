@@ -93,7 +93,7 @@ export default {
       dialogVisible: false,
       options : [],
       value: '',
-      projectindex: 0,
+      projectindex: null,
       isEmptyProject: true
     }
   },
@@ -108,6 +108,13 @@ export default {
         console.log(response.data)
         this.projectList = response.data.namelist
         this.projectidList = response.data.projectidlist 
+        console.log('id:' + this.getQueryVariable('id'))
+        this.projectindex = this.getQueryVariable('id')
+        if(this.getQueryVariable('id') != null)
+        {
+          this.isEmptyProject = false
+          this.value = this.projectList[this.projectindex]
+        }
       }else{
         alert('错误')
         this.$router.push('/home')
@@ -117,8 +124,6 @@ export default {
       alert('错误')
       this.$router.push('/home')
     });
-    this.projectindex = this.getQueryVariable('id')
-    this.value = this.projectList[this.projectindex]
   },
   methods:{
     handleMouseSelect() {
@@ -147,6 +152,7 @@ export default {
       this.list.splice(id, 1)
     },
     defineProject(){
+      console.log(this.value)
       if (this.value === '')
       {
         this.dialogVisible = true

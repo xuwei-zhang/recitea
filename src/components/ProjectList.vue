@@ -30,11 +30,12 @@
         <el-button type="danger" @click="deleteProject">删除</el-button>
         <el-button @click="deleteVisible=false">取消</el-button>
       </el-dialog>
+      
       <div style="float: right;padding-left: 5px;padding-right: 5px">
-        <el-button @click="deleteVisible=true" type="danger"> 删除项目</el-button>
+        <el-button @click="deleteVisible=true" type="danger" v-show = "isnotempty"> 删除项目</el-button>
       </div>
       <el-button style="float: left" @click="newItem">新建题目</el-button>
-        <el-button icon="el-icon-edit" style="float: right" @click="gotoQuiz">去做题！</el-button>
+        <el-button icon="el-icon-edit" style="float: right" @click="gotoQuiz" v-show="isnotempty">去做题！</el-button>
       <el-table :data="tableData">
         <el-table-column
           prop="id"
@@ -59,7 +60,15 @@
             <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(scope.$index)">删除</el-button>
+              @click="deleteQuiz(scope.$index)">删除</el-button>
+            <el-dialog title="删除题目" :visible.sync="deleteQuizVisible" align="center">
+            <div>
+              您确定删除该题目？
+            </div>
+            <br>
+            <el-button type="danger" @click="handleDelete">删除</el-button>
+            <el-button @click="deleteQuizVisible=false">取消</el-button>
+          </el-dialog>
           </template>
     </el-table-column>
       </el-table>
@@ -82,7 +91,7 @@ export default {
       else{
         for(var i = 0; i< this.titleList.length; i++){
           if(this.titleList[i] === value){
-            callback(new Error('该项目名称已存在！'))
+            callback(new Error('该项目已存在！'))
           }
         }
         callback()
@@ -93,8 +102,12 @@ export default {
       idList: [],
       tableData: [],
       NowProjectId: 0,
+      NowProjectIndex: 0,
+      deleteindex: null,
       dialogFormVisible: false,
       deleteVisible: false,
+      deleteQuizVisible:false,
+      isnotempty: false,
       projectData: {
         projectname : ''
       },
@@ -107,7 +120,7 @@ export default {
   },
   methods: {
     getProjectData(projectId){
-      console.log("index: " + projectId)
+      // console.log("index: " + projectId)
       axios({
         method:'post',
         url:'/question/getquestion',
@@ -139,9 +152,15 @@ export default {
         // this.$router.push('/main')
       })
       this.NowProjectId = this.idList[projectId]
+      this.NowProjectIndex = projectId
     },
     gotoQuiz(){
-      this.$router.push({path:'/quiz', query:{projectid:String(this.NowProjectId), id:'1'}})
+      if(this.tableData.length === 0){
+        alert('题库为空，请先创建题目！')
+      }
+      else{
+        this.$router.push({path:'/quiz', query:{projectid:String(this.NowProjectId), id:'1'}})
+      }
     },
     gotoNewProject(){
       this.dialogFormVisible = true
@@ -179,7 +198,8 @@ export default {
         response => {
           if(response.data.code === 200){
             alert("删除项目成功")
-            this.getProjectData(this.NowProjectId)
+            this.deleteVisible = false
+            this.$router.go(0)
           }
           else{
             alert("删除项目失败")
@@ -194,8 +214,11 @@ export default {
     handleEdit(index) {
       this.$router.push({path:'/quiz', query:{projectid:String(this.NowProjectId), id: index + 1}})
     },
-    handleDelete(index) {
+    handleDelete() {
+      var index = this.deleteindex
+      console.log('index: ' + index)
       var questionid = this.tableData[index].questionid
+      console.log('questionid: ' + questionid)
       axios({
         method:'post',
         url:'/question/deletequestion',
@@ -203,7 +226,8 @@ export default {
       }).then(response => {
         if(response.data.code === 200){
           alert('删除题目成功')
-          this.$router.go(0)
+          this.deleteQuizVisible = false
+          this.getProjectData(this.NowProjectIndex)
         }
         else{
           alert('删除题目失败')
@@ -216,12 +240,24 @@ export default {
       })
     },
     newItem(){
-      this.$router.push({
-        path:'/edittext',
-        query:{
-          id: this.NowProjectId
-        }
-      })
+      if(this.titleList.length === 0){
+        alert('请先创建项目！')
+      }
+      else{
+        this.$router.push({
+          path:'/edittext',
+          query:{
+            id: this.NowProjectIndex
+          }
+        })
+      }
+      
+    },
+    deleteQuiz(ind){
+      this.deleteQuizVisible=true
+      console.log(ind)
+      this.deleteindex = ind
+      console.log(this.deleteindex)
     }
   },
   mounted(){
@@ -235,6 +271,12 @@ export default {
         console.log(response.data)
         this.titleList = response.data.namelist
         this.idList = response.data.projectidlist 
+        if(this.titleList.length === 0){
+          this.isnotempty = false
+        }
+        else{
+          this.isnotempty = true
+        }
         console.log(this.idList)
         this.getProjectData(this.NowProjectId)
       }else{

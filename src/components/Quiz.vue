@@ -9,6 +9,7 @@
             <el-button style="float: right" @click="goNextPage" :disabled="isLast">下一题</el-button>
             <h3 style="text-align: center">第{{this.getQueryVariable('id')}}/{{tests.length}}题</h3>
             <p style="text-align: justify;font-size: 30px" id="quiz">
+            {{this.input}}
             </p>
           </div>
         </el-card>
@@ -68,7 +69,7 @@ export default {
         url:'/question/getquestion',
         params:{'projectid': this.getQueryVariable('projectid')}
       }).then(response => {
-        console.log(response.data)
+        console.log('response: ' + response)
         if(response.data.code === 200){
           this.tests = response.data.tablelist
           console.log(this.tests)
@@ -90,57 +91,63 @@ export default {
     changeHTML(i){
       var text = this.tests[i].text
       var words = this.tests[i].words
-      var ty = []
-      var input = []
-      let res = text
-      var sor = {}
-      var ans = []
-      for(let j=0;j<words.length;j++)
+      this.ans = this.tests[i].words
+      for(var j=0;j<words.length; j++)
       {
-        sor[text.indexOf(words[j])] = words[j]
+        text = text.replaceAll(words[j], "【填空"+(j+1).toString()+"】")
       }
-      words = Object.keys(sor).sort();
-      for(var key in words){
-        res = (res+ "").split(sor[words[key]], 2)
-        if(res.length === 2)
-        {
-          input.push(res[0])
-          ty.push(0)
-          input.push(sor[words[key]])
-          ty.push(1)
-          res = res[1]
-        }
-      }
-      input.push(res)
-      ty.push(0)
-      console.log(input, ty)
-      this.inputlen = input.length
-      this.input = input
-      this.ty = ty
-      for(var k = 0; k<input.length; k++)
-      {
-        if (ty[k] === 0)
-        {
-          var para1 = document.createElement("span")
-          var node1 = document.createTextNode(input[k])
-          para1.appendChild(node1)
-          var element1 = document.getElementById("quiz")
-          element1.appendChild(para1)
-        }
-        else
-        {
-          var para = document.createElement("span")
-          var node2 = document.createTextNode("【填空"+(this.inputvalue.length+1)+"】")
-          para.appendChild(node2)
-          var element = document.getElementById("quiz")
-          element.appendChild(para)
-          ans.push(this.input[k])
-          this.inputvalue.push("")
-          this.isCorrect.push(false)
-        }
-      }
-      this.ans = ans
-      console.log(this.inputvalue)
+      this.input = text
+    //   var ty = []
+    //   var input = []
+    //   let res = text
+    //   var sor = {}
+    //   var ans = []
+    //   for(let j=0;j<words.length;j++)
+    //   {
+    //     sor[text.indexOf(words[j])] = words[j]
+    //   }
+    //   words = Object.keys(sor).sort();
+    //   for(var key in words){
+    //     res = (res+ "").split(sor[words[key]], 2)
+    //     if(res.length === 2)
+    //     {
+    //       input.push(res[0])
+    //       ty.push(0)
+    //       input.push(sor[words[key]])
+    //       ty.push(1)
+    //       res = res[1]
+    //     }
+    //   }
+    //   input.push(res)
+    //   ty.push(0)
+    //   console.log(input, ty)
+    //   this.inputlen = input.length
+    //   this.input = input
+    //   this.ty = ty
+    //   for(var k = 0; k<input.length; k++)
+    //   {
+    //     if (ty[k] === 0)
+    //     {
+    //       var para1 = document.createElement("span")
+    //       var node1 = document.createTextNode(input[k])
+    //       para1.appendChild(node1)
+    //       var element1 = document.getElementById("quiz")
+    //       element1.appendChild(para1)
+    //     }
+    //     else
+    //     {
+    //       var para = document.createElement("span")
+    //       var node2 = document.createTextNode("【填空"+(this.inputvalue.length+1)+"】")
+    //       para.appendChild(node2)
+    //       var element = document.getElementById("quiz")
+    //       element.appendChild(para)
+    //       ans.push(this.input[k])
+    //       this.inputvalue.push("")
+    //       this.isCorrect.push(false)
+    //     }
+    //   }
+    //   this.ans = ans
+    //   console.log(this.inputvalue)
     },
     getQueryVariable(name)
     {
@@ -183,10 +190,14 @@ export default {
       }
     },
     resetInput(){
+      console.log(this.inputvalue)
+      this.inputvalue = []
       for (var i = 0; i< this.inputvalue.length; i++)
       {
-        this.inputvalue[i] = ''
+        this.inputvalue.push("")
       }
+      this.showFlag = false
+      console.log(this.inputvalue)
     }
   }
 }
