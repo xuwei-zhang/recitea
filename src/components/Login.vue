@@ -56,7 +56,7 @@ export default {
               alert('登录成功')
               localStorage.setItem("id", response.data.id);
               console.log(localStorage.getItem('id'));
-              this.$router.push("/main");
+              this.$router.push("/home");
             }
             else if(response.data.code === 400){
               alert('用户名或密码错误');

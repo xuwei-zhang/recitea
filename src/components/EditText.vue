@@ -64,10 +64,10 @@
       <el-dialog title="请选择要添加的题库" :visible.sync="dialogVisible">
         <el-select v-model="value" placeholder="请选择">
           <el-option
-              v-for="item in projectList"
-              :key="item.id"
-              :label="item.title"
-              :value="item.title">
+              v-for="(item, i) in projectList"
+              :key="i"
+              :label="item"
+              :value="item">
           </el-option>
         </el-select>
         <div style="margin: 20px">
@@ -78,6 +78,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: "EditText",
   data(){
@@ -86,13 +87,7 @@ export default {
       inputVisible:true,
       textVisible:false,
       list: [],
-      isSubmit: [],
-      projectList: [
-        {
-          id: 1,
-          title: '贪欲九头蛇'
-        }
-      ],
+      projectList: [],
       dialogVisible: false,
       options : [],
       value: '',
@@ -100,6 +95,26 @@ export default {
     }
   },
   mounted() {
+    axios({
+      method:'post',
+      url:'/project/getproject',
+      params:{'id':localStorage.getItem('id')}
+
+    }).then(response => {
+      if(response.data.code === 200){
+        console.log(response.data)
+        this.projectList = response.data.namelist
+        // this.idList = response.data.projectidlist
+        // console.log(this.idList)
+      }else{
+        alert('错误')
+        this.$router.push('/home')
+      }
+    }).catch(error=>{
+      console.log(error)
+      alert('错误')
+      this.$router.push('/home')
+    });
   },
   methods:{
     handleMouseSelect() {
