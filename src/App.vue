@@ -8,22 +8,22 @@
           </div>
         </el-menu-item>
 
-        <el-menu-item v-show="isLogin" style="float:right;padding-left: 5px;padding-right: 5px">
+        <el-menu-item v-show="!islogin" style="float:right;padding-left: 5px;padding-right: 5px">
           <el-button class="button" @click="goReg" round>注册</el-button>
         </el-menu-item>
-        <el-menu-item v-show="isLogin" style="float: right;padding-left: 5px;padding-right: 5px">
+        <el-menu-item v-show="!islogin" style="float: right;padding-left: 5px;padding-right: 5px">
           <el-button @click="goLog" round> 登陆 </el-button>
-        </el-menu-item>
-        <el-menu-item v-show="!isLogin" style="float: right;padding-left: 5px;padding-right: 5px">
-          您好，{{this.username}}
-        </el-menu-item>
-        <el-menu-item v-show="!isLogin" style="float: right;padding-left: 5px;padding-right: 5px">
+        </el-menu-item>      
+        <el-menu-item v-show="islogin" style="float: right;padding-left: 5px;padding-right: 5px">
           <el-button @click="Logout" round> 注销 </el-button>
         </el-menu-item>
-        <el-menu-item index="1" style="float: right" @click="goProjectList">
+        <el-menu-item v-show="islogin" style="float: right;padding-left: 5px;padding-right: 5px">
+          您好，{{username}}
+        </el-menu-item>
+        <el-menu-item v-show="islogin" index="1" style="float: right" @click="goProjectList">
           库
         </el-menu-item>
-        <el-menu-item index="2" style="float: right" @click="goEditText">
+        <el-menu-item v-show="islogin" index="2" style="float: right" @click="goEditText">
           文字导入
         </el-menu-item>
 
@@ -65,7 +65,8 @@
 export default {
   data() {
     return {
-      username : ''
+      username : '',
+      islogin: false
     };
   },
   methods: {
@@ -87,19 +88,26 @@ export default {
     goEditText(){
       this.$router.push('/edittext')
     },
-    isLogin(){
-      if (localStorage.getItem('id'))
-      {
-        this.username = localStorage.getItem('username')
-        return true
-      }
-      else
-        return false
-    },
     Logout(){
       localStorage.removeItem('id')
       localStorage.removeItem('username')
+      this.islogin = false
+      alert("注销成功")
+      this.$router.push('/home')
     }
+  },
+  mounted(){
+      console.log(localStorage.getItem('id'))
+      if (localStorage.getItem('id') != null)
+      {
+        this.username = localStorage.getItem('username')
+        console.log(this.username)
+        console.log(localStorage.getItem('username'))
+        this.islogin = true
+      }
+      else{
+        this.islogin = false
+      }
   }
 }
 </script>

@@ -57,7 +57,9 @@ export default {
               localStorage.setItem("id", response.data.id);
               localStorage.setItem("username", response.data.username)
               console.log(localStorage.getItem('id'));
+              console.log(localStorage.getItem('username'));
               this.$router.push("/home");
+              this.$router.go(0)
             }
             else if(response.data.code === 400){
               alert('用户名或密码错误');
