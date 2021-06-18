@@ -27,7 +27,7 @@
               <el-button @click="inputVisible=true;textVisible=false">
                 编辑
               </el-button>
-              <el-button @click="handleMouseSelect">
+              <el-button @click="handleMouseSelect" v-show="textarea != ''">
                 Get!
               </el-button>
             </div>
@@ -79,6 +79,7 @@
 
 <script>
 import axios from 'axios'
+import qs from 'qs'
 export default {
   name: "EditText",
   data(){
@@ -88,7 +89,7 @@ export default {
       textVisible:false,
       list: [],
       projectList: [],
-      projeceidList: [],
+      projectidList: [],
       dialogVisible: false,
       options : [],
       value: '',
@@ -174,6 +175,28 @@ export default {
       }
       res.qtext = this.list[i].qtext
       res.text = this.list[i].text
+      console.log("projectidList: " + this.projectidList)
+      var projectid = this.projectidList[this.projectindex]
+      console.log("projectid: " + projectid)
+      axios({
+        method:'post',
+        url:'/question/newquestion',
+        params:{'projectid': projectid, 'content': res.text, 'wordlist': res.qtext},
+        paramsSerializer: params => {return qs.stringify(params, { indices: false })}
+      }).then(response => {
+        console.log(response)
+        if(response.data.code === 200){
+          alert('成功添加到题库！')
+        }
+        else{
+          alert("添加到题库失败")
+          this.$router.push('/home')
+        }
+      }).catch(error => {
+        console.log(error)
+        alert('错误')
+        this.$router.push('/home')
+      })
       // 如果提交成功，按钮会disabled
       this.list[i].isSubmit = true
       return res
