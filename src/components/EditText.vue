@@ -100,7 +100,12 @@ export default {
       id: 0,
       quizId:0,
       tid:-1,
-      projectList: [],
+      projectList: [
+        {
+          id: 1,
+          title: '贪欲九头蛇'
+        }
+      ],
       dialogVisible: false,
       options : [],
       value: '',
