@@ -55,6 +55,7 @@ export default {
             {
               alert('登录成功')
               localStorage.setItem("id", response.data.id);
+              localStorage.setItem("username", response.data.username)
               console.log(localStorage.getItem('id'));
               this.$router.push("/home");
             }

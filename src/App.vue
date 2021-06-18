@@ -7,11 +7,18 @@
             <img alt="Vue logo" src="./assets/logo.png">
           </div>
         </el-menu-item>
-        <el-menu-item style="float:right;padding-left: 5px;padding-right: 5px">
+
+        <el-menu-item v-show="isLogin" style="float:right;padding-left: 5px;padding-right: 5px">
           <el-button class="button" @click="goReg" round>注册</el-button>
         </el-menu-item>
-        <el-menu-item style="float: right;padding-left: 5px;padding-right: 5px">
+        <el-menu-item v-show="isLogin" style="float: right;padding-left: 5px;padding-right: 5px">
           <el-button @click="goLog" round> 登陆 </el-button>
+        </el-menu-item>
+        <el-menu-item v-show="!isLogin" style="float: right;padding-left: 5px;padding-right: 5px">
+          您好，{{localStorage.getItem('username')}}
+        </el-menu-item>
+        <el-menu-item v-show="!isLogin" style="float: right;padding-left: 5px;padding-right: 5px">
+          <el-button @click="Logout" round> 注销 </el-button>
         </el-menu-item>
         <el-menu-item index="1" style="float: right" @click="goProjectList">
           库
@@ -78,6 +85,16 @@ export default {
     },
     goEditText(){
       this.$router.push('/edittext')
+    },
+    isLogin(){
+      if (localStorage.getItem('id'))
+        return true
+      else
+        return false
+    },
+    Logout(){
+      localStorage.removeItem('id')
+      localStorage.removeItem('username')
     }
   }
 }
