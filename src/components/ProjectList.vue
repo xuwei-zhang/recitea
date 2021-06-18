@@ -66,8 +66,8 @@ export default {
         callback(new Error('项目名称不能为空'))
       }
       else{
-        for(var i = 0; i< this.projectList.length; i++){
-          if(this.projectList[i].title === value){
+        for(var i = 0; i< this.titleList.length; i++){
+          if(this.titleList[i] === value){
             callback(new Error('该项目名称已存在！'))
           }
         }
@@ -120,7 +120,28 @@ export default {
       this.dialogFormVisible = true
     },
     submitForm(formName){
-      return formName
+      this.$refs[formName].validate((valid) => {
+        if(valid){
+          axios({
+          method:'post',
+          url:'/project/newproject',
+          params:{'id': localStorage.getItem("id"), 'name': this.projectData.projectname}
+        }).then(response=>{
+          console.log(response)
+          if(response.data.code === 200){
+            alert("新建项目成功")
+            this.$router.go(0)
+          }else{
+            alert("错误")
+            this.$router.push("/projectlist")
+          }
+        }).catch(error =>{
+          console.log(error)
+          this.$router.push("/projectlist")
+        })
+        }
+      });
+
     },
     deleteProject(){
       return

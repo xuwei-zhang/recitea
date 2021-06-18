@@ -2,6 +2,10 @@
     <el-row>
       <el-col :span="8">
         <el-card class="card">
+          <h3>
+            当前添加的题库：{{this.value}}
+          </h3>
+          <el-button @click="dialogVisible=true">更改题库</el-button>
           <h3>请输入待出题的文本</h3>
           <div v-if="inputVisible">
             <el-input
@@ -9,6 +13,7 @@
                 :autosize="{ minRows: 10, maxRows: 20}"
                 placeholder="请输入内容"
                 v-model="textarea"
+                :disabled="isEmptyProject"
             >
             </el-input>
             <el-button @click="inputVisible=false;textVisible=true">
@@ -19,7 +24,7 @@
             {{textarea}}
             <div style="margin-top: 20px" align="center">
               <el-button @click="inputVisible=true;textVisible=false">
-                复位
+                编辑
               </el-button>
               <el-button @click="handleMouseSelect">
                 Get!
@@ -60,17 +65,17 @@
               {{i+1}}."{{iitem}}";
             </div>
             <br>
-            <el-button>提交至题库！</el-button>
+            <el-button @click="submitQuiz(item.id)" :disabled="isSubmit[item.id]">提交至题库！</el-button>
           </div>
         </el-card>
       </el-col>
       <el-dialog title="请选择要添加的题库" :visible.sync="dialogVisible">
         <el-select v-model="value" placeholder="请选择">
           <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              v-for="(item, i) in projectList"
+              :key="i"
+              :label="item"
+              :value="item">
           </el-option>
         </el-select>
         <div style="margin: 20px">
@@ -81,6 +86,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: "EditText",
   data(){
@@ -90,6 +96,7 @@ export default {
       textVisible:false,
       list: [],
       quizList: [],
+      isSubmit: [],
       id: 0,
       quizId:0,
       tid:-1,
@@ -97,11 +104,30 @@ export default {
       dialogVisible: false,
       options : [],
       value: '',
-
+      isEmptyProject: true
     }
   },
   mounted() {
-    this.dialogVisible = true
+        axios({
+      method:'post',
+      url:'/project/getproject',
+      params:{'id':localStorage.getItem('id')}
+
+    }).then(response => {
+      if(response.data.code === 200){
+        console.log(response.data)
+        this.projectList = response.data.namelist
+        // this.idList = response.data.projectidlist 
+        // console.log(this.idList)
+      }else{
+        alert('错误')
+        this.$router.push('/home')
+      }
+    }).catch(error=>{
+      console.log(error)
+      alert('错误')
+      this.$router.push('/home')
+    });
   },
   methods:{
     handleMouseSelect() {
@@ -133,6 +159,7 @@ export default {
           this.tid = tid
           this.quizList.push({id:this.quizId,tid:tid, text:text, qtext:[qtext] });
           this.quizId += 1;
+          this.isSubmit.push(false)
         }
       }
     },
@@ -145,7 +172,6 @@ export default {
         this.list[i].id = this.list[i].id - 1
       }
       this.id = this.list.length
-
       var flag = false
       for (var j = 0; j < this.quizList.length; j++)
       {
@@ -171,11 +197,20 @@ export default {
         this.dialogVisible = true
         if (this.projectList.length === 0)
         {
-          this.$message.error('项目列表为空,需要先创建项目, 为您自动跳转到项目库页面！')
-          this.$router.push('/projectlist')
+          this.$message.error('项目列表为空,需要先创建项目')
         }
       }
-      else this.dialogVisible = false
+      else
+      {
+        this.isEmptyProject = false
+        this.dialogVisible = false
+      }
+    },
+    submitQuiz(id){
+      var res = this.quizList[id]
+      // 如果提交成功，按钮会disabled
+      this.isSubmit[id] = true
+      return res
     }
   }
 }
