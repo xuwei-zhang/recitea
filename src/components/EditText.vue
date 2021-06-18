@@ -100,12 +100,7 @@ export default {
       id: 0,
       quizId:0,
       tid:-1,
-      projectList: [
-        {
-          id: 1,
-          title: '贪欲九头蛇'
-        }
-      ],
+      projectList: [],
       dialogVisible: false,
       options : [],
       value: '',
@@ -113,7 +108,7 @@ export default {
     }
   },
   mounted() {
-        axios({
+    axios({
       method:'post',
       url:'/project/getproject',
       params:{'id':localStorage.getItem('id')}
