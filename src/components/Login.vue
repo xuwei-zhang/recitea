@@ -63,7 +63,7 @@ export default {
             }
             else if(response.data.code === 400){
               alert('用户名或密码错误');
-              
+              this.form.password = ''
             }
             else{
               alert('错误')
