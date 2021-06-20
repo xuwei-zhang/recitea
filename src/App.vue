@@ -27,7 +27,7 @@
           文字导入
         </el-menu-item>
         <el-menu-item index="3" style="float: right" @click="goAbout">
-          RecieA说明
+          ReciTEA说明
         </el-menu-item>
 
       </el-menu>

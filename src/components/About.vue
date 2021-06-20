@@ -2,7 +2,7 @@
   <el-container>
     <el-main>
       <el-card>
-        <h3>为什么是RecitaA？</h3>
+        <h3>为什么是ReciTEA？</h3>
         <div style="font-size: 20px;text-align: justify;text-indent:2em">
           <p>学生们饱受背诵的折磨。</p>
           <p>
@@ -12,7 +12,7 @@
         </div>
       </el-card>
       <el-card>
-        <h3>RecitaA使用指南</h3>
+        <h3>ReciTEA使用指南</h3>
         <div style="font-size: 20px;text-align: justify;text-indent:2em">
           <h4> Step1 新建题库，并点击出题进入出题界面</h4>
           <h4> Step2 找到一段需要背诵的文章，并粘贴到输入框内，点击确认。若需要修改，可以点击编辑按钮进行修改</h4>
