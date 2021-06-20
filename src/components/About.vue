@@ -25,7 +25,7 @@
       <el-card>
         <h3>开发团队介绍</h3>
         <p> 张绪威 BUAA 软件学院 Email:zhangxuwei@buaa.edu.cn</p>
-        <p> 李韵阳 BUAA 软件学院 Email:</p>
+        <p> 李韵阳 BUAA 软件学院 Email:lyyre@outlook.com</p>
       </el-card>
     </el-main>
   </el-container>
