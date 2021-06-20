@@ -15,11 +15,17 @@
         <h3>ReciTEA使用指南</h3>
         <div style="font-size: 20px;text-align: justify;text-indent:2em">
           <h4> Step1 新建题库，并点击出题进入出题界面</h4>
+          <el-image :src="require('@/assets/step1.png')" class="scene" style="width: 30%"></el-image>
           <h4> Step2 找到一段需要背诵的文章，并粘贴到输入框内，点击确认。若需要修改，可以点击编辑按钮进行修改</h4>
+          <el-image :src="require('@/assets/step2.png')" class="scene" style="width: 30%"></el-image>
           <h4> Step3 鼠标选择需要背诵的段落，点击 Get！按钮，可以看到该段落出现在了出题区</h4>
+          <el-image :src="require('@/assets/step3.png')" class="scene" style="width: 100%"></el-image>
           <h4> Step4 在出题区选中需要记忆的关键字，点击 出题！按钮，即可出题 </h4>
+          <el-image :src="require('@/assets/step4.png')" class="scene" style="width: 100%"></el-image>
           <h4> Step5 在出题完成后，点击提交至题库，即可在题库中看见该题</h4>
+          <el-image :src="require('@/assets/step5.png')" class="scene" style="width: 100%"></el-image>
           <h4> Step6 在题库点击去做题！即可进入做题界面进行做题</h4>
+          <el-image :src="require('@/assets/step6.png')" class="scene" style="width: 100%"></el-image>
         </div>
       </el-card>
       <el-card>
