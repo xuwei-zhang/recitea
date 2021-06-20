@@ -6,10 +6,15 @@ import Home from "../components/Home"
 import EditText from "../components/EditText";
 import ProjectList from "../components/ProjectList";
 import Quiz from "../components/Quiz";
+import About from "../components/About";
 
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '/',
+    redirect : '/home'
+  },
   {
     path: '/home',
     name: 'Home',
@@ -46,7 +51,7 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: About
   }
 ]
 

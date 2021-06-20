@@ -26,6 +26,9 @@
         <el-menu-item v-show="islogin" index="2" style="float: right" @click="goEditText">
           文字导入
         </el-menu-item>
+        <el-menu-item index="3" style="float: right" @click="goAbout">
+          RecieA说明
+        </el-menu-item>
 
       </el-menu>
     </el-header>
@@ -94,6 +97,9 @@ export default {
       this.islogin = false
       alert("注销成功")
       this.$router.push('/home')
+    },
+    goAbout(){
+      this.$router.push('/about')
     }
   },
   mounted(){
