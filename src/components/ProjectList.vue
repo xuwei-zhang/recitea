@@ -120,39 +120,42 @@ export default {
   },
   methods: {
     getProjectData(projectId){
-      // console.log("index: " + projectId)
-      axios({
-        method:'post',
-        url:'/question/getquestion',
-        params:{'projectid': this.idList[projectId]}
-      }).then(response => {
-        console.log(response.data)
-        if(response.data.code === 200){
-          this.tableData = response.data.tablelist
-          for(var o=0;o<this.tableData.length;o++)
-          {
-            var tmp = this.tableData[o].words 
-            var res = ""
-            for(var k =0; k<tmp.length;k++)
+      if(this.idList.length > 0){
+        axios({
+          method:'post',
+          url:'/question/getquestion',
+          params:{'projectid': this.idList[projectId]}
+        }).then(response => {
+          console.log(response.data)
+          if(response.data.code === 200){
+            this.tableData = response.data.tablelist
+            for(var o=0;o<this.tableData.length;o++)
             {
-              if (k != tmp.length - 1)
-                res += tmp[k] + ","
-              else
-                res += tmp[k]
+              var tmp = this.tableData[o].words 
+              var res = ""
+              for(var k =0; k<tmp.length;k++)
+              {
+                if (k != tmp.length - 1)
+                  res += tmp[k] + ","
+                else
+                  res += tmp[k]
+              }
+              this.tableData[o].words = res
             }
-            this.tableData[o].words = res
+          }else{
+            alert('错误')
+            // this.$router.push('/main')
           }
-        }else{
-          alert('错误')
+          
+        }).catch(error=>{
+          console.log(error)
           // this.$router.push('/main')
-        }
-        
-      }).catch(error=>{
-        console.log(error)
-        // this.$router.push('/main')
-      })
-      this.NowProjectId = this.idList[projectId]
-      this.NowProjectIndex = projectId
+        })
+        this.NowProjectId = this.idList[projectId]
+        this.NowProjectIndex = projectId
+      }
+      // console.log("index: " + projectId)
+
     },
     gotoQuiz(){
       if(this.tableData.length === 0){
